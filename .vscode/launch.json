@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+{
+        "name": "🕹 Debug Game",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "K:\\Godot\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64.exe",
+        "cwd": "${workspaceFolder}",
+        "internalConsoleOptions": "openOnSessionStart",
+        "pipeTransport": {
+            "pipeCwd": "${workspaceFolder}",
+            "pipeProgram": "K:\\Godot\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64\\Godot_v4.6.1-stable_mono_win64.exe",
+            "pipeArgs": [
+            ]
+        }
+      }
+    ]
+}
