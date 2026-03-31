@@ -7,7 +7,7 @@ public partial class PlayerController : CharacterBody2D
 	public float Speed { get; set; } = 10.0f;
 	int speed_multiplier = 30;
 	[Export]
-	public float JumpVelocity  { get; set; }= 10.0f;
+	public float JumpVelocity  { get; set; } = 10.0f;
 	int jump_multiplier = -30;
 	public override void _PhysicsProcess(double delta)
 	{
