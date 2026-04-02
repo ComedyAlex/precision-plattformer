@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c6jagek7curg6" path="res://AnimatedSprite2d.cs" id="3_dd465"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
-size = Vector2(15, 21)
+size = Vector2(13, 17)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_epypp"]
 atlas = ExtResource("2_44cfe")
@@ -168,10 +168,13 @@ animations = [{
 [node name="Player" type="CharacterBody2D" unique_id=1425626286]
 script = ExtResource("1_ghijl")
 Speed = 6.0
+JumpVelocity = 9.0
+WallJumpVelocity = 5.0
+DashVelocity = 13.0
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=237618296]
-position = Vector2(-0.5, 1.5)
+position = Vector2(0.5, 3.5)
 shape = SubResource("RectangleShape2D_0e48y")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1346849275]
@@ -183,3 +186,14 @@ script = ExtResource("3_dd465")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=265444459]
 zoom = Vector2(3, 3)
+
+[node name="RayCastLeft" type="RayCast2D" parent="." unique_id=1950018031]
+position = Vector2(0, 3)
+rotation = 1.5707964
+target_position = Vector2(0, 10)
+collide_with_areas = true
+
+[node name="RayCastRight" type="RayCast2D" parent="." unique_id=1451842288]
+position = Vector2(2, 3)
+rotation = -1.5707964
+target_position = Vector2(0, 10)
