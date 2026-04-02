@@ -19,6 +19,12 @@ run/main_scene="uid://qvmbnfccl54m"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/mode=2
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
+
 [dotnet]
 
 project/assembly_name="precision-plattformer"
@@ -58,4 +64,6 @@ move_up={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

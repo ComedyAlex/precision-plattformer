@@ -170,7 +170,7 @@ script = ExtResource("1_ghijl")
 Speed = 6.0
 JumpVelocity = 9.0
 WallJumpVelocity = 5.0
-DashVelocity = 13.0
+DashVelocity = 11.0
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=237618296]
@@ -185,7 +185,7 @@ autoplay = "idle"
 script = ExtResource("3_dd465")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=265444459]
-zoom = Vector2(3, 3)
+zoom = Vector2(2, 2)
 
 [node name="RayCastLeft" type="RayCast2D" parent="." unique_id=1950018031]
 position = Vector2(0, 3)
