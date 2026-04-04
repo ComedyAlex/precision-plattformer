@@ -168,8 +168,8 @@ animations = [{
 [node name="Player" type="CharacterBody2D" unique_id=1425626286]
 script = ExtResource("1_ghijl")
 Speed = 6.0
-JumpVelocity = 9.0
-WallJumpVelocity = 5.0
+JumpVelocity = 11.0
+WallJumpVelocity = 5.5
 DashVelocity = 11.0
 metadata/_edit_group_ = true
 

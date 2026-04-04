@@ -16,7 +16,7 @@ public partial class PlayerController : CharacterBody2D
 	[Export]
 	public float DashVelocity { get; set; } = 10.0f;
 	int dash_multiplier = 30;
-	bool IsDashAvailable = true;
+	bool isDashAvailable = true;
 	bool isDashing = false;
 	public double dashTimer = .2f;
 	public double dashTimerReset = .2f;
@@ -55,6 +55,7 @@ public partial class PlayerController : CharacterBody2D
 		else if(!IsOnFloor())
 		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, AirFriction); //airfriction
+			velocity.Y = Mathf.MoveToward(Velocity.Y, 0, AirFriction);
 		}
 		else
 		{
@@ -62,7 +63,7 @@ public partial class PlayerController : CharacterBody2D
 		}
 		
 		//Dash
-		if(Input.IsActionJustPressed("dash") && IsDashAvailable && !isDashing)
+		if(Input.IsActionJustPressed("dash") && isDashAvailable && !isDashing)
 		{
 			velocity = Godot.Vector2.Zero;
 			Godot.Vector2 dashDirection = Godot.Vector2.Zero;
@@ -107,7 +108,7 @@ public partial class PlayerController : CharacterBody2D
 				isDashing = true;
 			}
 			velocity += dashDirection.Normalized() * DashVelocity * dash_multiplier;
-			IsDashAvailable = false;
+			isDashAvailable = false;
 			dashTimer = dashTimerReset;
 		}
 		//dashtimer
@@ -126,7 +127,7 @@ public partial class PlayerController : CharacterBody2D
 		}
 		if(IsOnFloor() && !isDashing)
 		{
-			IsDashAvailable = true;
+			isDashAvailable = true;
 		}
 		
 
