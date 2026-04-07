@@ -171,7 +171,6 @@ Speed = 6.0
 JumpVelocity = 11.0
 WallJumpVelocity = 5.5
 DashVelocity = 11.0
-metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=237618296]
 position = Vector2(0.5, 3.5)
@@ -185,7 +184,13 @@ autoplay = "idle"
 script = ExtResource("3_dd465")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=265444459]
+position = Vector2(123, -7)
+offset = Vector2(-75, -100)
+anchor_mode = 0
 zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+rotation_smoothing_enabled = true
 
 [node name="RayCastLeft" type="RayCast2D" parent="." unique_id=1950018031]
 position = Vector2(0, 3)

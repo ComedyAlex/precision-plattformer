@@ -27,7 +27,12 @@ public partial class PlayerController : CharacterBody2D
 	public float Acceleration { get; set; } = 10;
 	[Export]
 	public float AirFriction { get; set; } = 5;
-	public override void _PhysicsProcess(double delta)
+	public void OnDeathAreaBodyEntered( PhysicsBody2D Player)
+	{
+		GD.Print("Area entered");
+	}
+
+		public override void _PhysicsProcess(double delta)
 	{
 		Godot.Vector2 velocity = Velocity;
 
@@ -146,6 +151,10 @@ public partial class PlayerController : CharacterBody2D
 		MoveAndSlide();
 
 		GetNode<Camera2D>("Camera2D").GlobalPosition = GlobalPosition.Round();
+
+		//Area2D deathArea = GetNode<Area2D>("DeathArea");
+		
+	
 
 		//Animation
 		AnimatedSprite2D animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
