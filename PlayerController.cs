@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq.Expressions;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -30,12 +31,24 @@ public partial class PlayerController : CharacterBody2D
 	bool lastFloorFrame;
 	bool playerDead = false;
 
+	public void OnHitBoxBodyEntered(Node body)
+	{
+		if(body is TileMapLayer)
+		{
+			playerDead = true;
+		}
+		else if(body is PhysicsBody2D)
+		{
+			playerDead = true;
+		}
+	}
     public override void _Ready()
     {
 		//retry screen
         GetNode<ColorRect>("Camera2D/Retry").Hide();
 		//time to frames
 		GetNode<Timer>("CoyoteTimer").WaitTime = CoyoteFrames / 60;
+		Connect("body_entered", new Callable(this, nameof(OnHitBoxBodyEntered)));
     }
 	
 		public override void _PhysicsProcess(double delta)
@@ -249,4 +262,5 @@ public partial class PlayerController : CharacterBody2D
 		Velocity = Godot.Vector2.Zero;
 		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Stop();
 	}
+	
 }

@@ -185,6 +185,10 @@ gravity = Vector3(0, 98, 0)
 scale_min = 0.02
 scale_max = 0.049999997
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lhvu3"]
+radius = 6.0
+height = 14.0
+
 [node name="Player" type="CharacterBody2D" unique_id=1425626286]
 script = ExtResource("1_ghijl")
 Speed = 5.5
@@ -216,6 +220,7 @@ position_smoothing_speed = 7.0
 rotation_smoothing_enabled = true
 
 [node name="Retry" type="ColorRect" parent="Camera2D" unique_id=425040510]
+visible = false
 offset_left = -218.0
 offset_top = -382.0
 offset_right = 942.0
@@ -256,6 +261,7 @@ one_shot = true
 
 [node name="WallSlideParticleEffectR" type="GPUParticles2D" parent="." unique_id=977330988]
 position = Vector2(6, 7)
+emitting = false
 texture = ExtResource("6_lhvu3")
 lifetime = 0.5
 speed_scale = 0.64
@@ -264,10 +270,20 @@ process_material = SubResource("ParticleProcessMaterial_dd465")
 
 [node name="WallSlideParticleEffectL" type="GPUParticles2D" parent="." unique_id=495053318]
 position = Vector2(-5, 7)
+emitting = false
 texture = ExtResource("6_lhvu3")
 lifetime = 0.5
 speed_scale = 0.64
 explosiveness = 0.15
 process_material = SubResource("ParticleProcessMaterial_dd465")
 
+[node name="Hitbox" type="Area2D" parent="." unique_id=499647650]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=187712392]
+position = Vector2(1, 4)
+shape = SubResource("CapsuleShape2D_lhvu3")
+
 [connection signal="timeout" from="CoyoteTimer" to="." method="OnCoyoteTimerTimeout"]
+[connection signal="body_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
