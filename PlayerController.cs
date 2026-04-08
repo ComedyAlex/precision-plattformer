@@ -14,7 +14,6 @@ public partial class PlayerController : CharacterBody2D
 	[Export] public float CoyoteFrames { get; set; } = 6;
 	[Export] public float WallJumpVelocity { get; set; } = 10.0f;
 	[Export] public float DashVelocity { get; set; } = 10.0f;
-
 	int dash_multiplier = 30;
 	bool isDashAvailable = true;
 	bool isDashing = false;
@@ -24,17 +23,18 @@ public partial class PlayerController : CharacterBody2D
 	
 	[Export] public float Friction { get; set; } = 20;
 	[Export] public float Acceleration { get; set; } = 10;
-	
 	[Export] public float AirFriction { get; set; } = 5;
-	bool playerDead = false;
+	[Export] public float WallGravity { get; set; } = 10;
+	public int wall_gravity_mulitplier = 100;
 	bool InCoyoteTime = false;
 	bool lastFloorFrame;
-	
+	bool playerDead = false;
 
     public override void _Ready()
     {
+		//retry screen
         GetNode<ColorRect>("Camera2D/Retry").Hide();
-
+		//time to frames
 		GetNode<Timer>("CoyoteTimer").WaitTime = CoyoteFrames / 60;
     }
 	
@@ -43,8 +43,7 @@ public partial class PlayerController : CharacterBody2D
 		Godot.Vector2 velocity = Velocity;
 
 		
-		// jump & coyote time
-		
+		// jump
 		if (Input.IsActionJustPressed("jump") && (IsOnFloor() || InCoyoteTime))
 		{
 			velocity.Y = JumpVelocity * jump_multiplier;
@@ -155,9 +154,12 @@ public partial class PlayerController : CharacterBody2D
 				GetNode<GpuParticles2D>("DashParticleEffect").Emitting = false;
 			}
 		}
+		//wall detection
+		RayCast2D onWallLeft = GetNode<RayCast2D>("RayCastLeft");
+		RayCast2D onWallRight = GetNode<RayCast2D>("RayCastRight");
 
 		//add gravity
-		if (!IsOnFloor() && !isDashing)
+		if (!IsOnFloor() && !isDashing && (!onWallLeft.IsColliding() || !onWallRight.IsColliding()))
 		{
 			velocity += GetGravity() * (float)delta;
 		}
@@ -166,17 +168,34 @@ public partial class PlayerController : CharacterBody2D
 			isDashAvailable = true;
 		}
 		
-
-		if(Input.IsActionJustPressed("jump") && GetNode<RayCast2D>("RayCastLeft").IsColliding() && !IsOnFloor())
+		//walljump
+		if(Input.IsActionJustPressed("jump") && onWallLeft.IsColliding() && !IsOnFloor())
 		{
 			velocity.Y = WallJumpVelocity * jump_multiplier * 2;
 			velocity.X = WallJumpVelocity * -jump_multiplier;
 		}
-		if(Input.IsActionJustPressed("jump") && GetNode<RayCast2D>("RayCastRight").IsColliding() && !IsOnFloor())
+		if(Input.IsActionJustPressed("jump") && onWallRight.IsColliding() && !IsOnFloor())
 		{
 			velocity.Y = WallJumpVelocity * jump_multiplier * 2;
 			velocity.X = WallJumpVelocity * jump_multiplier;
 		}
+
+		//wallslide
+		
+		if(!IsOnFloor() && onWallLeft.IsColliding() && direction.X < 0 && velocity.Y > 0)
+		{
+			velocity.Y =  WallGravity * wall_gravity_mulitplier * (float)delta;
+			GetNode<GpuParticles2D>("WallSlideParticleEffectL").Emitting = true;
+		}
+		else{GetNode<GpuParticles2D>("WallSlideParticleEffectL").Emitting = false;}
+		if(!IsOnFloor() && onWallRight.IsColliding() && direction.X > 0 && velocity.Y > 0)
+		{
+			velocity.Y =  WallGravity * wall_gravity_mulitplier * (float)delta;
+			GetNode<GpuParticles2D>("WallSlideParticleEffectR").Emitting = true;
+		}
+		else{GetNode<GpuParticles2D>("WallSlideParticleEffectR").Emitting = false;}
+
+		//player death
 		if(playerDead)
 		{
 			velocity = Godot.Vector2.Zero;
@@ -184,14 +203,14 @@ public partial class PlayerController : CharacterBody2D
 		}
 
 		Velocity = velocity;
+		lastFloorFrame = IsOnFloor();
 		MoveAndSlide();
 
-		lastFloorFrame = IsOnFloor();
-
+		
+		//coyote time
 		if(!IsOnFloor() && !IsJumping && lastFloorFrame)
 		{
 			InCoyoteTime = true;
-			GD.Print("CoyoteTimeTrue");
 			GetNode<Timer>("CoyoteTimer").Start();
 		}
 
@@ -222,14 +241,12 @@ public partial class PlayerController : CharacterBody2D
 	public  void OnCoyoteTimerTimeout()
 	{
 		InCoyoteTime = false;
-		GD.Print("CoyoteTimeFalse");
 	}
-	public void OnDeathAreaBodyEntered( PhysicsBody2D Player)
+	public void OnDeathAreaBodyEntered(PhysicsBody2D Player)
 	{
 		playerDead = true;
 		GetNode<Control>("Camera2D/Retry").Show();
 		Velocity = Godot.Vector2.Zero;
 		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Stop();
 	}
-
 }
