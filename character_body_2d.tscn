@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://wgbblha8843a" path="res://PlayerController.cs" id="1_ghijl"]
 [ext_resource type="Texture2D" uid="uid://c153y2t2vt0cb" path="res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight.png" id="2_44cfe"]
 [ext_resource type="Script" uid="uid://c6jagek7curg6" path="res://AnimatedSprite2d.cs" id="3_dd465"]
+[ext_resource type="FontFile" uid="uid://diefjbfjkdvlw" path="res://brackeys_platformer_assets/brackeys_platformer_assets/fonts/PixelOperator8-Bold.ttf" id="4_44cfe"]
+[ext_resource type="Texture2D" uid="uid://fy5ldxa5v6g3" path="res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight(solo_sprite).png" id="5_dd465"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0e48y"]
 size = Vector2(13, 17)
@@ -165,6 +167,15 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Theme" id="Theme_dd465"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_44cfe"]
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+angle_min = 1.0728835e-05
+angle_max = 1.0728835e-05
+gravity = Vector3(0, 0, 0)
+
 [node name="Player" type="CharacterBody2D" unique_id=1425626286]
 script = ExtResource("1_ghijl")
 Speed = 6.0
@@ -196,18 +207,20 @@ position_smoothing_speed = 7.0
 rotation_smoothing_enabled = true
 
 [node name="Retry" type="ColorRect" parent="Camera2D" unique_id=425040510]
-offset_left = -396.0
-offset_top = -354.0
-offset_right = 764.0
-offset_bottom = 261.0
+offset_left = -357.0
+offset_top = -352.0
+offset_right = 803.0
+offset_bottom = 263.0
+theme = SubResource("Theme_dd465")
 color = Color(0, 0, 0, 0.827451)
 
 [node name="Label" type="Label" parent="Camera2D/Retry" unique_id=1784240474]
 layout_mode = 0
-offset_left = 309.0
-offset_top = 246.0
-offset_right = 426.0
-offset_bottom = 270.0
+offset_left = 205.0
+offset_top = 241.0
+offset_right = 433.0
+offset_bottom = 265.0
+theme_override_fonts/font = ExtResource("4_44cfe")
 text = "Press F to retry"
 
 [node name="RayCastLeft" type="RayCast2D" parent="." unique_id=1950018031]
@@ -220,3 +233,16 @@ collide_with_areas = true
 position = Vector2(2, 3)
 rotation = -1.5707964
 target_position = Vector2(0, 10)
+
+[node name="DashParticleEffect" type="GPUParticles2D" parent="." unique_id=213917071]
+show_behind_parent = true
+position = Vector2(0, 2)
+emitting = false
+texture = ExtResource("5_dd465")
+lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_44cfe")
+
+[node name="CoyoteTimer" type="Timer" parent="." unique_id=1878801246]
+one_shot = true
+
+[connection signal="timeout" from="CoyoteTimer" to="." method="OnCoyoteTimerTimeout"]
