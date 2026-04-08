@@ -27,10 +27,13 @@ public partial class PlayerController : CharacterBody2D
 	public float Acceleration { get; set; } = 10;
 	[Export]
 	public float AirFriction { get; set; } = 5;
-	public void OnDeathAreaBodyEntered( PhysicsBody2D Player)
-	{
-		GD.Print("Area entered");
-	}
+	bool playerDead = false;
+	
+
+    public override void _Ready()
+    {
+        GetNode<ColorRect>("Camera2D/Retry").Hide();
+    }
 
 		public override void _PhysicsProcess(double delta)
 	{
@@ -146,13 +149,20 @@ public partial class PlayerController : CharacterBody2D
 			velocity.Y = WallJumpVelocity * jump_multiplier * 2;
 			velocity.X = WallJumpVelocity * jump_multiplier;
 		}
+		if(playerDead)
+		{
+			velocity = Godot.Vector2.Zero;
 
+		}
 		Velocity = velocity;
 		MoveAndSlide();
 
-		GetNode<Camera2D>("Camera2D").GlobalPosition = GlobalPosition.Round();
+		
 
-		//Area2D deathArea = GetNode<Area2D>("DeathArea");
+		if(playerDead && Input.IsActionJustPressed("accept"))
+		{
+			GetTree().ReloadCurrentScene();
+		}
 		
 	
 
@@ -161,7 +171,7 @@ public partial class PlayerController : CharacterBody2D
 		if(direction != Godot.Vector2.Zero)
 		{
 			animatedSprite2D.Animation = "move";
-			if(direction == Godot.Vector2.Left)
+			if(direction == Godot.Vector2.Left && !playerDead)
 			{
 				animatedSprite2D.FlipH = true;
 			}
@@ -170,9 +180,16 @@ public partial class PlayerController : CharacterBody2D
 				animatedSprite2D.FlipH = false;
 			}
 		}
-		if(velocity.X == 0 & velocity.Y == 0)
+		if(velocity.X == 0 && velocity.Y == 0 && !playerDead)
 		{
 			animatedSprite2D.Animation = "idle";
 		}
+	}
+	public void OnDeathAreaBodyEntered( PhysicsBody2D Player)
+	{
+		playerDead = true;
+		GetNode<Control>("Camera2D/Retry").Show();
+		Velocity = Godot.Vector2.Zero;
+		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Stop();
 	}
 }

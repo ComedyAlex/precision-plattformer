@@ -184,13 +184,31 @@ autoplay = "idle"
 script = ExtResource("3_dd465")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=265444459]
-position = Vector2(123, -7)
-offset = Vector2(-75, -100)
+position = Vector2(164, -23)
+offset = Vector2(-250, -100)
 anchor_mode = 0
-zoom = Vector2(2, 2)
+zoom = Vector2(1.5, 1.5)
+limit_top = 600
+limit_bottom = 600
+limit_smoothed = true
 position_smoothing_enabled = true
-position_smoothing_speed = 10.0
+position_smoothing_speed = 7.0
 rotation_smoothing_enabled = true
+
+[node name="Retry" type="ColorRect" parent="Camera2D" unique_id=425040510]
+offset_left = -396.0
+offset_top = -354.0
+offset_right = 764.0
+offset_bottom = 261.0
+color = Color(0, 0, 0, 0.827451)
+
+[node name="Label" type="Label" parent="Camera2D/Retry" unique_id=1784240474]
+layout_mode = 0
+offset_left = 309.0
+offset_top = 246.0
+offset_right = 426.0
+offset_bottom = 270.0
+text = "Press F to retry"
 
 [node name="RayCastLeft" type="RayCast2D" parent="." unique_id=1950018031]
 position = Vector2(0, 3)
