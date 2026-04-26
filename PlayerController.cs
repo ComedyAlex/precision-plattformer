@@ -21,7 +21,9 @@ public partial class PlayerController : CharacterBody2D
 	public double dashTimer = .2f;
 	public double dashTimerReset = .2f;
 
-	
+	Image particleImage = Image.LoadFromFile("res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight(solo_sprite).png");
+	Image particleImageFlipped = Image.LoadFromFile("res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight(solo_sprite).png");
+
 	[Export] public float Friction { get; set; } = 20;
 	[Export] public float Acceleration { get; set; } = 10;
 	[Export] public float AirFriction { get; set; } = 5;
@@ -33,13 +35,10 @@ public partial class PlayerController : CharacterBody2D
 
 	public void OnHitBoxBodyEntered(Node body)
 	{
-		if(body is TileMapLayer)
+		GD.Print("bruh man I'm dead :|");
+		if(body is TileMapLayer || body is PhysicsBody2D)
 		{
-			playerDead = true;
-		}
-		else if(body is PhysicsBody2D)
-		{
-			playerDead = true;
+			die();
 		}
 	}
     public override void _Ready()
@@ -49,6 +48,7 @@ public partial class PlayerController : CharacterBody2D
 		//time to frames
 		GetNode<Timer>("CoyoteTimer").WaitTime = CoyoteFrames / 60;
 		Connect("body_entered", new Callable(this, nameof(OnHitBoxBodyEntered)));
+		particleImageFlipped.FlipX();
     }
 	
 		public override void _PhysicsProcess(double delta)
@@ -148,14 +148,12 @@ public partial class PlayerController : CharacterBody2D
 		GpuParticles2D dashParticleEffect = GetNode<GpuParticles2D>("DashParticleEffect");
 		if(isDashing)
 		{
-			Image particleImageFlipped = Image.LoadFromFile("res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight(solo_sprite).png");
-			Image particleImage = Image.LoadFromFile("res://brackeys_platformer_assets/brackeys_platformer_assets/sprites/knight(solo_sprite).png");
+			
 			if(direction == Godot.Vector2.Left)
 			{
-				particleImageFlipped.FlipX();
 				dashParticleEffect.Texture = ImageTexture.CreateFromImage(particleImageFlipped);
 			}
-			if(direction == Godot.Vector2.Right)
+			else if(direction == Godot.Vector2.Right)
 			{
 				dashParticleEffect.Texture = ImageTexture.CreateFromImage(particleImage);
 			}
@@ -164,7 +162,7 @@ public partial class PlayerController : CharacterBody2D
 			if(dashTimer <= 0)
 			{
 				isDashing = false;
-				GetNode<GpuParticles2D>("DashParticleEffect").Emitting = false;
+				dashParticleEffect.Emitting = false;
 			}
 		}
 		//wall detection
@@ -257,6 +255,10 @@ public partial class PlayerController : CharacterBody2D
 	}
 	public void OnDeathAreaBodyEntered(PhysicsBody2D Player)
 	{
+		die();
+	}
+
+	public void die() {
 		playerDead = true;
 		GetNode<Control>("Camera2D/Retry").Show();
 		Velocity = Godot.Vector2.Zero;

@@ -220,7 +220,6 @@ position_smoothing_speed = 7.0
 rotation_smoothing_enabled = true
 
 [node name="Retry" type="ColorRect" parent="Camera2D" unique_id=425040510]
-visible = false
 offset_left = -218.0
 offset_top = -382.0
 offset_right = 942.0
@@ -286,4 +285,4 @@ position = Vector2(1, 4)
 shape = SubResource("CapsuleShape2D_lhvu3")
 
 [connection signal="timeout" from="CoyoteTimer" to="." method="OnCoyoteTimerTimeout"]
-[connection signal="body_entered" from="Hitbox" to="." method="OnHitboxBodyEntered"]
+[connection signal="body_entered" from="Hitbox" to="." method="OnHitBoxBodyEntered"]
